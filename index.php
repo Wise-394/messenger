@@ -1,3 +1,6 @@
+<?php
+include './php_functions/database.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,7 +24,7 @@
                 <input type="password" name="password" placeholder="Enter password" required>
 
                 <input type="submit" name="login" value="Login" class="mt-1 btn btn-primary">
-                <p class="d-inline">No Account? <a href="register.php">Ask admin</a></p>
+                <p class="d-inline">No Account? Ask admin</p>
             </form>
         </div>
     </div>
@@ -44,12 +47,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['name'] = $name;
                 header("Location: home.php");
                 exit();
-            } else {
-                echo "incorrect";
             }
-        } else {
-            echo "Enter user or pass";
         }
+        $sql = "SELECT * from USERS WHERE name = '$name' AND password = '$password'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $_SESSION['name'] = $name;
+            header("location: home.php");
+            exit();
+        }
+    } else {
+        echo "Enter user or pass";
     }
 }
+
+$conn->close();
 ?>
